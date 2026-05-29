@@ -27,14 +27,32 @@ public class TravelPackage {
     @Column(length = 1500)
     private String description;
 
+    private String imageUrl;
+
+    @NotNull(message = "Duration is required")
+    @Min(value = 1, message = "Duration must be at least 1 day")
+    private Integer durationDays;
+
+    @NotNull(message = "Available seats are required")
+    @Min(value = 1, message = "Available seats must be at least 1")
+    private Integer availableSeats;
+
+    @Column(length = 1500)
+    private String highlights;
+
     public TravelPackage() {
     }
 
-    public TravelPackage(String title, String destination, Double price, String description) {
+    public TravelPackage(String title, String destination, Double price, String description, String imageUrl,
+                         Integer durationDays, Integer availableSeats, String highlights) {
         this.title = title;
         this.destination = destination;
         this.price = price;
         this.description = description;
+        this.imageUrl = imageUrl;
+        this.durationDays = durationDays;
+        this.availableSeats = availableSeats;
+        this.highlights = highlights;
     }
 
     public Long getId() {
@@ -75,5 +93,37 @@ public class TravelPackage {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Integer getDurationDays() {
+        return durationDays;
+    }
+
+    public void setDurationDays(Integer durationDays) {
+        this.durationDays = durationDays;
+    }
+
+    public Integer getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(Integer availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
+    public String getHighlights() {
+        return highlights;
+    }
+
+    public void setHighlights(String highlights) {
+        this.highlights = highlights;
     }
 }

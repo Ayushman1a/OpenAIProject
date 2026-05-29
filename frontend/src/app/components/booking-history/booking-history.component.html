@@ -1,0 +1,38 @@
+<div class="card">
+  <h2>Your Bookings</h2>
+
+  <div *ngIf="loading" class="alert alert-info">Loading bookings...</div>
+  <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+
+  <table *ngIf="bookings.length > 0" class="table">
+    <thead>
+      <tr>
+        <th>Package</th>
+        <th>Destination</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Booked On</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let booking of bookings">
+        <td>{{ booking.travelPackage.title }}</td>
+        <td>{{ booking.travelPackage.destination }}</td>
+        <td>₹{{ booking.travelPackage.price | number:'1.0-2' }}</td>
+        <td>{{ booking.status }}</td>
+        <td>{{ booking.bookedOn | date:'mediumDate' }}</td>
+        <td>
+          <button
+            *ngIf="booking.status !== 'CANCELLED'"
+            (click)="cancelBooking(booking)">
+            Cancel
+          </button>
+          <span *ngIf="booking.status === 'CANCELLED'">—</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && bookings.length === 0" class="alert alert-info">You have no bookings yet.</div>
+</div>

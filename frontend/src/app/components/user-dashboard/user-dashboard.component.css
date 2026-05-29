@@ -1,0 +1,53 @@
+.page-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.dashboard-header {
+  margin-bottom: 24px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.dashboard-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(50, 50, 93, 0.08);
+  padding: 24px;
+}
+
+.item-list,
+.booking-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item-list li,
+.booking-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e6e9ef;
+}
+
+.item-list li:last-child,
+.booking-list li:last-child {
+  border-bottom: none;
+}
+
+button {
+  background: #3178c6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 14px;
+  cursor: pointer;
+}

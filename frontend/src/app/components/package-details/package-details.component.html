@@ -1,0 +1,36 @@
+<div class="package-detail-shell">
+  <ng-container *ngIf="travelPackage; else noPackage">
+    <div class="detail-grid">
+      <div class="detail-image-wrapper">
+        <img [src]="travelPackage.imageUrl || 'https://via.placeholder.com/820x460?text=Travel'" alt="{{ travelPackage.title }}" />
+      </div>
+      <div class="detail-content">
+        <h2>{{ travelPackage.title }}</h2>
+        <p class="destination">{{ travelPackage.destination }}</p>
+
+        <div class="pill-row">
+          <span>{{ travelPackage.durationDays || 1 }} days</span>
+          <span>{{ travelPackage.availableSeats || 0 }} seats available</span>
+          <span>₹{{ travelPackage.price | number:'1.0-2' }} per person</span>
+        </div>
+
+        <p class="detail-description">{{ travelPackage.description }}</p>
+
+        <div *ngIf="travelPackage.highlights" class="highlights">
+          <h3>Highlights</h3>
+          <p>{{ travelPackage.highlights }}</p>
+        </div>
+
+        <div class="button-row">
+          <button *ngIf="authService.isAuthenticated() && !authService.isAdmin()" (click)="bookNow()">Book Now</button>
+          <button *ngIf="authService.isAdmin()" [routerLink]="['/packages', travelPackage.id, 'edit']">Edit Package</button>
+          <button routerLink="/">Back to Packages</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noPackage>
+    <div class="alert alert-info">Package details are unavailable.</div>
+  </ng-template>
+</div>

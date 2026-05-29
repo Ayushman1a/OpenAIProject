@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TravelPackage } from '../../models/travel-package';
 import { PackageService } from '../../services/package.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-package-list',
@@ -10,13 +11,30 @@ import { PackageService } from '../../services/package.service';
 })
 export class PackageListComponent implements OnInit {
   packages: TravelPackage[] = [];
+  searchTerm = '';
   errorMessage = '';
   loading = false;
 
-  constructor(private service: PackageService, private router: Router) {}
+  constructor(
+    private service: PackageService,
+    private router: Router,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadPackages();
+  }
+
+  get filteredPackages(): TravelPackage[] {
+    const filter = this.searchTerm.toLowerCase().trim();
+    if (!filter) {
+      return this.packages;
+    }
+    return this.packages.filter(pkg =>
+      pkg.title.toLowerCase().includes(filter) ||
+      pkg.destination.toLowerCase().includes(filter) ||
+      pkg.description.toLowerCase().includes(filter)
+    );
   }
 
   loadPackages(): void {
@@ -36,6 +54,18 @@ export class PackageListComponent implements OnInit {
 
   createPackage(): void {
     this.router.navigate(['/packages/new']);
+  }
+
+  viewPackage(pkg: TravelPackage): void {
+    if (pkg.id) {
+      this.router.navigate(['/packages', pkg.id]);
+    }
+  }
+
+  bookPackage(pkg: TravelPackage): void {
+    if (pkg.id) {
+      this.router.navigate(['/packages', pkg.id, 'book']);
+    }
   }
 
   editPackage(pkg: TravelPackage): void {

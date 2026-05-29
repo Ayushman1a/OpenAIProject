@@ -1,0 +1,43 @@
+<div class="page-shell">
+  <div class="dashboard-header">
+    <div>
+      <h2>Travel Dashboard</h2>
+      <p>Book your next trip, review recent bookings, and explore curated packages.</p>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+
+  <section class="cards-grid">
+    <div class="dashboard-card">
+      <h3>Available Packages</h3>
+      <div *ngIf="loadingPackages" class="alert alert-info">Loading packages...</div>
+      <div *ngIf="!loadingPackages && packages.length === 0" class="alert alert-info">No travel packages available yet.</div>
+      <ul *ngIf="packages.length > 0" class="item-list">
+        <li *ngFor="let pkg of packages">
+          <div>
+            <strong>{{ pkg.title }}</strong>
+            <p>{{ pkg.destination }} · ₹{{ pkg.price | number:'1.0-2' }}</p>
+          </div>
+          <button (click)="bookPackage(pkg)">Book</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>My Bookings</h3>
+      <div *ngIf="loadingBookings" class="alert alert-info">Loading bookings...</div>
+      <div *ngIf="!loadingBookings && bookings.length === 0" class="alert alert-info">No bookings yet. Find a package and book your next adventure.</div>
+      <ul *ngIf="bookings.length > 0" class="booking-list">
+        <li *ngFor="let booking of bookings">
+          <div>
+            <strong>{{ booking.travelPackage.title }}</strong>
+            <p>{{ booking.travelDate }} · {{ booking.travelerCount }} traveler(s)</p>
+            <p>Status: {{ booking.status }}</p>
+          </div>
+          <button (click)="cancelBooking(booking.id)">Cancel</button>
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>

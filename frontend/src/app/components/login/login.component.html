@@ -1,0 +1,24 @@
+<div class="card form-card">
+  <h2>Login to Book Packages</h2>
+
+  <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="username">Username</label>
+      <input id="username" formControlName="username" />
+      <small class="error" *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">Username is required.</small>
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" />
+      <small class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">Password is required.</small>
+    </div>
+
+    <div class="button-row">
+      <button type="submit" [disabled]="loading">Login</button>
+      <button type="button" routerLink="/signup">Create Account</button>
+    </div>
+  </form>
+</div>

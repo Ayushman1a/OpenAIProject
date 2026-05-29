@@ -2,17 +2,23 @@ package com.example.traveltourism.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+
+    private final UserDetailsService userDetailsService;
+
+    public SecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -20,8 +26,14 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                     .antMatchers("/h2-console/**").permitAll()
-                    .antMatchers("/api/**").authenticated()
-                    .anyRequest().permitAll()
+                    .antMatchers("/api/auth/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/packages/**").permitAll()
+                    .antMatchers(HttpMethod.POST, "/api/packages/**").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.PUT, "/api/packages/**").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.DELETE, "/api/packages/**").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.POST, "/api/bookings/**").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/bookings/**").authenticated()
+                    .anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .and()
@@ -31,14 +43,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService users() {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin123"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin);
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean

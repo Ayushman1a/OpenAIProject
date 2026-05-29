@@ -1,36 +1,39 @@
-<div class="card">
-  <div class="header-section">
-    <div class="header-title">
-      <h2>🌍 Travel Packages</h2>
-      <p *ngIf="packages.length === 0 && !loading" class="no-data">No travel packages found.</p>
+<div class="page-shell">
+  <div class="card hero-card">
+    <div>
+      <h2>🌍 Discover your next dream vacation</h2>
+      <p>Browse hand-picked travel packages with flexible booking, local highlights, and seat availability.</p>
     </div>
-    <button class="btn-primary" (click)="createPackage()">+ New Package</button>
-  </div>
+      <button class="btn-primary" *ngIf="authService.isAdmin()" (click)="createPackage()">+ Add Package</button>
 
   <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
   <div *ngIf="loading" class="alert alert-info">Loading packages...</div>
 
-  <table *ngIf="packages.length > 0" class="table">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Destination</th>
-        <th>Price</th>
-        <th>Description</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let pkg of packages">
-        <td><strong>{{ pkg.title }}</strong></td>
-        <td>{{ pkg.destination }}</td>
-        <td><span class="price-badge">₹{{ pkg.price | number:'1.0-2' }}</span></td>
-        <td>{{ pkg.description }}</td>
-        <td class="table-actions">
-          <button (click)="editPackage(pkg)">Edit</button>
-          <button (click)="deletePackage(pkg)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="filteredPackages.length > 0" class="package-grid">
+    <article *ngFor="let pkg of filteredPackages" class="package-card">
+      <img class="package-image" [src]="pkg.imageUrl || 'https://via.placeholder.com/450x280?text=Travel'" alt="{{ pkg.title }}" />
+      <div class="package-body">
+        <div class="package-header">
+          <div>
+            <h3>{{ pkg.title }}</h3>
+            <p class="destination">{{ pkg.destination }}</p>
+          </div>
+          <span class="price-tag">₹{{ pkg.price | number:'1.0-2' }}</span>
+        </div>
+        <p class="package-description">{{ pkg.description }}</p>
+        <div class="package-meta">
+          <span>{{ pkg.durationDays || 1 }} days</span>
+          <span>{{ pkg.availableSeats || 0 }} seats left</span>
+        </div>
+        <div class="package-actions">
+          <button (click)="viewPackage(pkg)">View Details</button>
+          <button *ngIf="authService.isAuthenticated() && !authService.isAdmin()" (click)="bookPackage(pkg)">Book Now</button>
+          <button *ngIf="authService.isAdmin()" (click)="editPackage(pkg)">Edit</button>
+          <button *ngIf="authService.isAdmin()" (click)="deletePackage(pkg)">Delete</button>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div *ngIf="!loading && filteredPackages.length === 0" class="alert alert-info">No packages match your search.</div>
 </div>

@@ -1,5 +1,16 @@
-<header>
-  <h1>{{ title }}</h1>
+<header class="app-header">
+  <div>
+    <h1>{{ title }}</h1>
+  </div>
+  <nav>
+    <a routerLink="/">Packages</a>
+    <a routerLink="/admin" *ngIf="authService.isAuthenticated() && authService.isAdmin()">Admin Dashboard</a>
+    <a routerLink="/dashboard" *ngIf="authService.isAuthenticated() && !authService.isAdmin()">My Dashboard</a>
+    <a routerLink="/bookings" *ngIf="authService.isAuthenticated() && !authService.isAdmin()">My Bookings</a>
+    <a routerLink="/login" *ngIf="!authService.isAuthenticated()">Login</a>
+    <a routerLink="/signup" *ngIf="!authService.isAuthenticated()">Sign Up</a>
+    <button *ngIf="authService.isAuthenticated()" (click)="logout()">Logout</button>
+  </nav>
 </header>
 <main>
   <router-outlet></router-outlet>

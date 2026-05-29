@@ -1,0 +1,30 @@
+<div class="card form-card">
+  <h2>Create a New Account</h2>
+
+  <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="username">Username</label>
+      <input id="username" formControlName="username" />
+      <small class="error" *ngIf="signupForm.get('username')?.touched && signupForm.get('username')?.invalid">Username is required.</small>
+    </div>
+
+    <div>
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" />
+      <small class="error" *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.invalid">A valid email is required.</small>
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" />
+      <small class="error" *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid">Password is required.</small>
+    </div>
+
+    <div class="button-row">
+      <button type="submit" [disabled]="loading">Sign Up</button>
+      <button type="button" routerLink="/login">Already have an account?</button>
+    </div>
+  </form>
+</div>

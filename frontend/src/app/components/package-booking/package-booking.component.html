@@ -1,0 +1,56 @@
+<div class="booking-shell">
+  <ng-container *ngIf="travelPackage; else loadingOrError">
+    <div class="booking-summary">
+      <div class="summary-left">
+        <img [src]="travelPackage.imageUrl || 'https://via.placeholder.com/640x360?text=Travel'" alt="{{ travelPackage.title }}" />
+        <div class="package-summary">
+          <h2>{{ travelPackage.title }}</h2>
+          <p class="destination">{{ travelPackage.destination }}</p>
+          <p>{{ travelPackage.description }}</p>
+          <div class="pill-row">
+            <span>{{ travelPackage.durationDays || 1 }} days</span>
+            <span>{{ travelPackage.availableSeats || 0 }} seats left</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="booking-form-card">
+        <h3>Booking Details</h3>
+        <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+          <label for="travelDate">Travel Date</label>
+          <input id="travelDate" type="date" formControlName="travelDate" />
+          <small class="error" *ngIf="bookingForm.get('travelDate')?.touched && bookingForm.get('travelDate')?.invalid">Select your travel date.</small>
+
+          <label for="travelerCount">Number of Travelers</label>
+          <input id="travelerCount" type="number" formControlName="travelerCount" min="1" />
+          <small class="error" *ngIf="bookingForm.get('travelerCount')?.touched && bookingForm.get('travelerCount')?.invalid">Enter at least one traveler.</small>
+
+          <label for="contactPhone">Contact Phone</label>
+          <input id="contactPhone" type="tel" formControlName="contactPhone" placeholder="e.g. +91 9876543210" />
+          <small class="error" *ngIf="bookingForm.get('contactPhone')?.touched && bookingForm.get('contactPhone')?.invalid">Contact phone is required.</small>
+
+          <div class="price-breakdown">
+            <span>Price per person</span>
+            <strong>₹{{ travelPackage.price | number:'1.0-2' }}</strong>
+          </div>
+          <div class="price-breakdown total">
+            <span>Total price</span>
+            <strong>₹{{ totalPrice | number:'1.0-2' }}</strong>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+          <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+          <div class="button-row">
+            <button type="submit" [disabled]="loading">Confirm Booking</button>
+            <button type="button" (click)="cancel()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingOrError>
+    <div class="alert alert-info">Loading booking details...</div>
+  </ng-template>
+</div>

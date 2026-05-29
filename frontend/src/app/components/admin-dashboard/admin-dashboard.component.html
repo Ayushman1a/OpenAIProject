@@ -1,0 +1,38 @@
+<div class="page-shell">
+  <div class="dashboard-header">
+    <div>
+      <h2>Admin Dashboard</h2>
+      <p>Manage travel packages, publish new itineraries, and keep the catalog up to date.</p>
+    </div>
+    <button class="btn-primary" (click)="addPackage()">+ Add Package</button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+  <div *ngIf="loading" class="alert alert-info">Loading packages...</div>
+
+  <div *ngIf="!loading && packages.length > 0" class="package-grid">
+    <article *ngFor="let pkg of packages" class="package-card">
+      <img class="package-image" [src]="pkg.imageUrl || 'https://via.placeholder.com/450x280?text=Travel'" alt="{{ pkg.title }}" />
+      <div class="package-body">
+        <div class="package-header">
+          <div>
+            <h3>{{ pkg.title }}</h3>
+            <p class="destination">{{ pkg.destination }}</p>
+          </div>
+          <span class="price-tag">₹{{ pkg.price | number:'1.0-2' }}</span>
+        </div>
+        <p class="package-description">{{ pkg.description }}</p>
+        <div class="package-meta">
+          <span>{{ pkg.durationDays || 1 }} days</span>
+          <span>{{ pkg.availableSeats || 0 }} seats left</span>
+        </div>
+        <div class="package-actions">
+          <button (click)="editPackage(pkg)">Edit</button>
+          <button (click)="deletePackage(pkg)">Delete</button>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div *ngIf="!loading && packages.length === 0" class="alert alert-info">No travel packages are available yet.</div>
+</div>
